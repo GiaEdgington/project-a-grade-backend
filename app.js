@@ -1,10 +1,9 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
-//ROUTE
-app.get('/', function(req, res){
-    res.send('hello');
-})
+//Middleware
+app.use(cors());
 
 //ROUTE
 const restaurants = require('./restaurants');
