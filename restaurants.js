@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
     if (req.query.location){
         searchRequest = {
-            term: 'Restaurants',
+            term: req.query.term,
             location: req.query.location
         };
     } else if (req.query.latitute && req.query.longitude) {
