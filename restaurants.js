@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const yelp = require('yelp-fusion');
+const fetch = require('node-fetch');
 
 require('dotenv/config');
 
