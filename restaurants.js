@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
             let name = restaurant.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace("&", "%26").toUpperCase();
             let zipcode = restaurant.location.zip_code;
 
-            fetch(`https://data.cityofnewyork.us/resource/43nn-pn8j.json?dba=${name}&zipcode=${zipcode}&$order=grade_date%20DESC&$limit=1`, {
+            fetch(`https://data.cityofnewyork.us/resource/43nn-pn8j.json?dba=${name}&zipcode=${zipcode}&$order=grade_date%20DESC`, {
                 headers: {
                     'Host': 'data.cityofnewyork.us',
                     'Content-type': 'application/json',
@@ -53,12 +53,24 @@ router.get('/', (req, res) => {
             .then(cityresponse => cityresponse.json())
             .then(cityresponse => {
                 counter++;
-                if (cityresponse[0].grade == "A") {
+                //console.log(cityresponse);
+                //NEED LOOP
+                /* for(let i of cityresponse){
+                    if (cityresponse.grade == "A") {
+                        returnRestaurants.push(restaurant);
+                    }
+                    if (counter == yelpResponse.length) {
+                       sendResponse();
+                    }
+                } */
+
+                //CONDITIONAL
+        /*      if (cityresponse[0].grade == "A") {
                     returnRestaurants.push(restaurant);
                 }
                 if (counter == yelpResponse.length) {
                    sendResponse();
-                }
+                } */
             })
             .catch(e => {
                 console.log(e);
