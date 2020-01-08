@@ -36,9 +36,8 @@ router.get('/', (req, res) => {
     client.search(searchRequest).then(response => {
         const yelpResponse = response.jsonBody.businesses;
         let counter= 0;
-
         yelpResponse.forEach(restaurant => {
-           //need to normalize restaurant names
+            //need to normalize restaurant names
             let name = restaurant.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace("&", "%26").toUpperCase();
             let zipcode = restaurant.location.zip_code;
 
@@ -53,24 +52,17 @@ router.get('/', (req, res) => {
             .then(cityresponse => cityresponse.json())
             .then(cityresponse => {
                 counter++;
-                //console.log(cityresponse);
-                //NEED LOOP
-                /* for(let i of cityresponse){
-                    if (cityresponse.grade == "A") {
+                for (let i of cityresponse){
+                    if (i.grade == "A") {
                         returnRestaurants.push(restaurant);
+                        break;
                     }
-                    if (counter == yelpResponse.length) {
-                       sendResponse();
-                    }
-                } */
-
-                //CONDITIONAL
-        /*      if (cityresponse[0].grade == "A") {
-                    returnRestaurants.push(restaurant);
                 }
-                if (counter == yelpResponse.length) {
-                   sendResponse();
-                } */
+                console.log(counter)
+                if (counter == yelpResponse.length - 1) {
+                    sendResponse();
+                }
+
             })
             .catch(e => {
                 console.log(e);
