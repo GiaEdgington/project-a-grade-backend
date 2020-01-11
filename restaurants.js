@@ -22,7 +22,8 @@ router.get('/', (req, res) => {
         searchRequest = {
             term: req.query.term,
             location: req.query.location,
-            sort_by: 'rating'
+            sort_by: 'rating',
+            price: req.query.price
         };
     } else if (req.query.latitute && req.query.longitude) {
         searchRequest = {
