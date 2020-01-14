@@ -23,23 +23,29 @@ router.get('/', (req, res) => {
             term: req.query.term,
             location: req.query.location,
             sort_by: 'rating',
-            price: req.query.price
+            //price: req.query.price
         };
     }
-    else {
+    else if (req.query.latitude) {
+        //console.log(req.query.latitude);
         searchRequest = {
             term: req.query.term,
             latitude: req.query.latitude,
             longitude: req.query.longitude,
-            sort_by: 'rating',
-            price: req.query.price
+            sort_by: 'rating'
         };
     }
 
+    if (req.query.price) {
+        searchRequest.price = req.query.price
+    } 
+
     //Submit Yelp API search with request.
     client.search(searchRequest).then(response => {
+
         const yelpResponse = response.jsonBody.businesses;
         let counter= 0;
+        //console.log(yelpResponse.length);
         yelpResponse.forEach(restaurant => {
             //need to normalize restaurant names
             let name = restaurant.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace("&", "%26").toUpperCase();
@@ -55,6 +61,7 @@ router.get('/', (req, res) => {
             })
             .then(cityresponse => cityresponse.json())
             .then(cityresponse => {
+                //console.log(cityresponse);
                 counter++;
                 for (let i of cityresponse){
                     if (i.grade == "A") {
@@ -62,7 +69,7 @@ router.get('/', (req, res) => {
                         break;
                     }
                 }
-                console.log(counter)
+                //console.log(counter)
                 if (counter == yelpResponse.length - 1) {
                     sendResponse();
                 }
