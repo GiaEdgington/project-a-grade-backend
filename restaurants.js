@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     let returnRestaurants = [];
 
     //Determine if request is location or coordinate based search and set parameters.
-
+    
     if (req.query.location){
         searchRequest = {
             term: req.query.term,
@@ -25,16 +25,18 @@ router.get('/', (req, res) => {
             sort_by: 'rating',
             price: req.query.price
         };
-    } else if (req.query.latitute && req.query.longitude) {
+    }
+    else {
         searchRequest = {
-            term: 'Restaurants',
+            term: req.query.term,
             latitude: req.query.latitude,
-            longitude: req.query.longitude
+            longitude: req.query.longitude,
+            sort_by: 'rating',
+            price: req.query.price
         };
     }
 
     //Submit Yelp API search with request.
-
     client.search(searchRequest).then(response => {
         const yelpResponse = response.jsonBody.businesses;
         let counter= 0;
