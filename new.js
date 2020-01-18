@@ -8,83 +8,25 @@ require('dotenv/config');
 
 const apiKey = process.env.API_KEY;
 const client = yelp.client(apiKey);
-const token = 'ecmGOZdhBzQna3iHZAWezOPHX';
 
 router.get('/new', (req, res) => {
 
-    let searchRequest = {};
-    let returnRestaurants = [];
-
     //Determine if request is location or coordinate based search and set parameters.
     
-    if (req.query.location){
-        searchRequest = {
-            term: req.query.term,
-            location: req.query.location,
-            atributes: 'hot_and_new'
-            //price: req.query.price
-        };
-    }
-    else if (req.query.latitude) {
-        //console.log(req.query.latitude);
-        searchRequest = {
-            term: req.query.term,
-            latitude: req.query.latitude,
-            longitude: req.query.longitude,
+        let searchRequest = {
+            term: 'Restaurants',
+            location: 'New York City',
             atributes: 'hot_and_new'
         };
-
-    }
 
     //Submit Yelp API search with request.
     client.search(searchRequest).then(response => {
-
-        const yelpResponse = response.jsonBody.businesses;
-        let counter= 0;
-        //console.log(yelpResponse.length);
-        yelpResponse.forEach(restaurant => {
-            //need to normalize restaurant names
-            let name = restaurant.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace("&", "%26").toUpperCase();
-            let zipcode = restaurant.location.zip_code;
-
-            fetch(`https://data.cityofnewyork.us/resource/43nn-pn8j.json?dba=${name}&zipcode=${zipcode}&$order=grade_date%20DESC`, {
-                headers: {
-                    'Host': 'data.cityofnewyork.us',
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-App-Token': token
-                }
-            })
-            .then(cityresponse => cityresponse.json())
-            .then(cityresponse => {
-                //console.log(cityresponse);
-                counter++;
-                for (let i of cityresponse){
-                    if (i.grade == "A") {
-                        returnRestaurants.push(restaurant);
-                        break;
-                    }
-                }
-                //console.log(counter)
-                if (counter == yelpResponse.length - 1) {
-                    sendResponse();
-                }
-
-            })
-            .catch(e => {
-                console.log(e);
-            })
-        })
-
+        const responseJson = JSON.stringify(response.jsonBody.businesses, null, 4);
+        res.send(responseJson);
     })
     .catch(e => {
         res.send(e);
     });
-
-    function sendResponse() {
-        res.send(returnRestaurants);
-    }
-
 });
 
 module.exports = router;
