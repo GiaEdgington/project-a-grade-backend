@@ -5,12 +5,12 @@ const cors = require('cors');
 //Middleware
 app.use(cors());
 
-//ROUTE
+//import routes
 const restaurants = require('./restaurants');
-const newRestaurants = require('./new');
+const getNew = require('./new_restaurants');
 
 app.use('/restaurants', restaurants);
 
-app.use('/new', newRestaurants);
+app.use('/new_restaurants', getNew);
 
 app.listen(3000);
