@@ -9,10 +9,9 @@ require('dotenv/config');
 const apiKey = process.env.API_KEY;
 const client = yelp.client(apiKey);
 
-router.get('/new', (req, res) => {
+router.get('/', (req, res) => {
 
-    //Determine if request is location or coordinate based search and set parameters.
-    
+    //Determine search request
         let searchRequest = {
             term: 'Restaurants',
             location: 'New York City',
@@ -20,7 +19,7 @@ router.get('/new', (req, res) => {
         };
 
     //Submit Yelp API search with request.
-    client.search(searchRequest).then(response => {
+     client.search(searchRequest).then(response => {
         const responseJson = JSON.stringify(response.jsonBody.businesses, null, 4);
         res.send(responseJson);
     })
